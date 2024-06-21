@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import Dropzone from 'react-dropzone'
 
 export default function Home() {
-  const [displayResult, setDisplayResult] = useState(false);
+  const [displaylabel, setDisplaylabel] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [map, setMap] = useState<{[key:string]: {
     file: File,
     status: string,
-    result: string,
+    label: string,
+    confidence: number,
   }}>({});
 
   const [error, setError] = useState({errorStr: '', status: false});
@@ -35,7 +36,7 @@ export default function Home() {
 
       setMap((item) => (
         {
-          ...item, [file.name]: {file: file, status: 'done', result: data.classification}
+          ...item, [file.name]: {file: file, status: 'done', label: data.classification, confidence: data.confidence}
         }
       ))
     }catch(error){
@@ -59,7 +60,8 @@ export default function Home() {
           ...item, [file.name]: {
             file: file,
             status: 'waiting',
-            result: '',
+            label: '',
+            confidence: 0.0,
           },
         }));
         handleUploadImage(file);
@@ -73,9 +75,9 @@ export default function Home() {
       <p className="text-5xl font-bold pb-10">Dog vs Cat</p>
       <div className="w-full flex flex-row justify-between bg-green-300 rounded-md p-">
         {
-          displayResult ?
+          displaylabel ?
             <div className="flex-1 bg-red-300 h-96 flex items-center justify-center">
-              Result
+              label
             </div>
             :
             <div className="flex-1 bg-red-300 h-96 flex items-center justify-center">
@@ -96,7 +98,7 @@ export default function Home() {
         {error.status ? <p className="text-red-500">{error.errorStr}</p> : <div>
       {Object.entries(map).map(([key, value]) => (
         <div key={key}>
-          <p>{key}, status:{value.status} {value.result}</p>
+          <p>{key}, {value.status} {(100*value.confidence).toFixed(2)}% {value.label == "cats" ? "cat": "dog"}</p>
         </div>
       ))}
       </div>}

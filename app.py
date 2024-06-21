@@ -3,9 +3,10 @@ from flask_cors import CORS
 from transformers import AutoImageProcessor, AutoModelForImageClassification
 from PIL import Image
 import torch
+import torch.nn.functional as F
 
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
 
 processor = AutoImageProcessor.from_pretrained("dima806/dogs_cats_image_detection")
 model = AutoModelForImageClassification.from_pretrained("dima806/dogs_cats_image_detection")
@@ -29,11 +30,16 @@ def classify_image():
         outputs = model(**inputs)
 
     # Get the predicted label
-    predictions = outputs.logits.argmax(-1)
-    labels = model.config.id2label
-    predicted_label = labels[predictions.item()]
+    logits = outputs.logits
+    probabilities = F.softmax(logits, dim=-1)
+    predicted_label_id = logits.argmax(-1).item()
+    predicted_label = model.config.id2label[predicted_label_id]
+    confidence = probabilities[0, predicted_label_id].item()
 
-    return jsonify({"classification": predicted_label})
+    return jsonify({
+        "classification": predicted_label,
+        "confidence": confidence
+    })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
