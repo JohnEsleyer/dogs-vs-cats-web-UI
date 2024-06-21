@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Dropzone from 'react-dropzone'
 
 export default function Home() {
-  const [displaylabel, setDisplaylabel] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [map, setMap] = useState<{[key:string]: {
     file: File,
@@ -73,32 +72,36 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-16">
       <p className="text-5xl font-bold pb-10">Dog vs Cat</p>
-      <div className="w-full flex flex-row justify-between bg-green-300 rounded-md p-">
-        {
-          displaylabel ?
-            <div className="flex-1 bg-red-300 h-96 flex items-center justify-center">
-              label
-            </div>
-            :
-            <div className="flex-1 bg-red-300 h-96 flex items-center justify-center">
+      <div className="w-full flex flex-row justify-between bg-slate-300 rounded-md p-">
+        
+            <div className="flex-1 h-96 flex items-center justify-center">
               <Dropzone onDrop={acceptedFiles => setFiles(acceptedFiles)}>
                 {({ getRootProps, getInputProps }) => (
                   <section>
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
-                      <p>Drag 'n' drop some files here, or click to select files</p>
+                      <p className="flex justify-center p-10 text-gray-700">Drag 'n' drop some files here, or click to select files</p>
                     </div>
                   </section>
                 )}
               </Dropzone>
             </div>
-        }
+        
       </div>
-      <div>
+      <div className="w-full pt-2">
+        <div className="w-full flex flex-row justify-between">
+          <span className="w-24">File</span>
+          <span className="w-24">Status</span>
+          <span className="w-24">Confidence</span>
+          <span className="w-24">Label</span>
+        </div>
         {error.status ? <p className="text-red-500">{error.errorStr}</p> : <div>
       {Object.entries(map).map(([key, value]) => (
-        <div key={key}>
-          <p>{key}, {value.status} {(100*value.confidence).toFixed(2)}% {value.label == "cats" ? "cat": "dog"}</p>
+        <div key={key} className="w-full flex flex-row justify-between border">
+          <span className="w-24 truncate ">{key}</span>
+          <span className="w-24">{value.status}</span>
+          <span className="w-24">{(100*value.confidence).toFixed(2)}%</span>
+          <span className="w-24">{value.label == "cats" ? "cat": "dog"}</span>
         </div>
       ))}
       </div>}
