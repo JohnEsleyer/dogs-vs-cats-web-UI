@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from transformers import AutoImageProcessor, AutoModelForImageClassification
 from PIL import Image
 import torch
-import io
 
 app = Flask(__name__)
+CORS(app) 
 
 processor = AutoImageProcessor.from_pretrained("dima806/dogs_cats_image_detection")
 model = AutoModelForImageClassification.from_pretrained("dima806/dogs_cats_image_detection")

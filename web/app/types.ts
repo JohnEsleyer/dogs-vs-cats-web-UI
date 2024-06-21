@@ -1,0 +1,4 @@
+
+type ApiDataType = {
+     classification: string;
+};
