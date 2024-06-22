@@ -1,7 +1,8 @@
 'use client'
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone';
+
 
 export default function Home() {
   const [files, setFiles] = useState<File[]>([]);
@@ -70,17 +71,20 @@ export default function Home() {
   }, [files]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-16">
-      <p className="text-5xl font-bold pb-10">Dog vs Cat</p>
+    <main className="flex min-h-screen flex-col items-center pl-16 pr-16">
+      <div className="w-32 ">
+        <Image src='/dogncat.png' alt='dog and cat' width={200} height={100} className="flex justify-center w-full"/>
+      </div>
+      <p className="flex justify-center text-5xl font-bold pb-4 w-full">Dog vs Cat</p>
       <div className="w-full flex flex-row justify-between bg-slate-300 rounded-md p-">
         
-            <div className="flex-1 h-96 flex items-center justify-center">
+            <div className="flex-1 h-60 flex items-center justify-center">
               <Dropzone onDrop={acceptedFiles => setFiles(acceptedFiles)}>
                 {({ getRootProps, getInputProps }) => (
                   <section>
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
-                      <p className="flex justify-center p-10 text-gray-700">Drag 'n' drop some files here, or click to select files</p>
+                      <p className="flex justify-center p-10 text-gray-700 text-center">Drag and drop some images here, or click to select images</p>
                     </div>
                   </section>
                 )}
@@ -101,7 +105,7 @@ export default function Home() {
           <span className="w-24 truncate ">{key}</span>
           <span className="w-24">{value.status}</span>
           <span className="w-24">{(100*value.confidence).toFixed(2)}%</span>
-          <span className="w-24">{value.label == "cats" ? "cat": "dog"}</span>
+          <span className="w-24 font-bold">{value.label == "cats" ? "cat": "dog"}</span>
         </div>
       ))}
       </div>}
