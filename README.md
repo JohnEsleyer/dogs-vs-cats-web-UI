@@ -7,7 +7,6 @@ This is a practice project in order to learn how to deploy a pretrained transfor
 
 
 ### Setup
-<p>(Note that this project was built in linux. I'm not sure the same process applies to other operating systems such as windows)</p>
 
 Install the python dependencies
 ```
